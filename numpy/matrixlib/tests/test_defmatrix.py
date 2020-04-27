@@ -72,9 +72,20 @@ class TestProperties:
         assert_array_equal(sum1, M.sum(axis=1))
         assert_equal(sumall, M.sum())
 
+        # keepdims is a no-op for axis=0 and axis=1; we stay in matrix-space either way
+        assert_array_equal(sum0, M.sum(axis=0, keepdims=True))
+        assert_array_equal(sum1, M.sum(axis=1, keepdims=True))
+
+        # Return a 1x1 matrix (instead of a scalar) when keepdims=True
+        assert_equal(matrix(sumall), M.sum(keepdims=True))
+
         assert_array_equal(sum0, np.sum(M, axis=0))
         assert_array_equal(sum1, np.sum(M, axis=1))
         assert_equal(sumall, np.sum(M))
+
+        assert_array_equal(sum0, np.sum(M, axis=0, keepdims=True))
+        assert_array_equal(sum1, np.sum(M, axis=1, keepdims=True))
+        assert_equal(matrix(sumall), np.sum(M, keepdims=True))
 
     def test_prod(self):
         x = matrix([[1, 2, 3], [4, 5, 6]])
