@@ -286,7 +286,7 @@ class matrix(N.ndarray):
         return self.__array__().tolist()
 
     # To preserve orientation of result...
-    def sum(self, axis=None, dtype=None, out=None):
+    def sum(self, axis=None, dtype=None, out=None, keepdims=False):
         """
         Returns the sum of the matrix elements, along the given axis.
 
@@ -318,7 +318,10 @@ class matrix(N.ndarray):
                 [7.]])
 
         """
-        return N.ndarray.sum(self, axis, dtype, out, keepdims=True)._collapse(axis)
+        result = N.ndarray.sum(self, axis, dtype, out, keepdims=True)
+        if not keepdims or axis:
+            result = result._collapse(axis)
+        return result
 
 
     # To update docstring from array to matrix...
