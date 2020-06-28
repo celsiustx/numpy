@@ -152,7 +152,10 @@ class matrix(N.ndarray):
         elif ndim == 0:
             shape = (1, 1)
         elif ndim == 1:
-            shape = (1, shape[0])
+            if shape == (0,):
+                shape = (0, 0)
+            else:
+                shape = (1, shape[0])
 
         order = 'C'
         if (ndim == 2) and arr.flags.fortran:

@@ -469,3 +469,7 @@ class TestShape(object):
         expanded = np.expand_dims(a, axis=1)
         assert_equal(expanded.ndim, 3)
         assert_(not isinstance(expanded, np.matrix))
+
+    def test_empty(self):
+        empty = matrix([])
+        assert empty.shape == (0,0)
