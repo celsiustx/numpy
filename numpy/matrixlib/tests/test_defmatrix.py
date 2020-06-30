@@ -63,6 +63,11 @@ class TestCtor(object):
         assert_(np.all(b2 == mixresult))
 
 
+def assert_scalar_equal(l, r):
+    assert np.isscalar(l), "%s not a scalar (comparing to %s)" % (l, r)
+    assert np.isscalar(r), "%s not a scalar (comparing to %s)" % (r, l)
+    assert l == r
+
 class TestProperties(object):
     def test_sum(self):
         """Test whether matrix.sum(axis=1) preserves orientation.
@@ -77,22 +82,28 @@ class TestProperties(object):
         sumall = 30
         assert_array_equal(sum0, M.sum(axis=0))
         assert_array_equal(sum1, M.sum(axis=1))
-        assert_equal(sumall, M.sum())
+        assert_scalar_equal(sumall, M.sum())
+        assert_scalar_equal(sumall, M.sum(axis=None))
+        assert_scalar_equal(sumall, M.sum(axis=(0,1)))
 
         # keepdims is a no-op for axis=0 and axis=1; we stay in matrix-space either way
         assert_array_equal(sum0, M.sum(axis=0, keepdims=True))
         assert_array_equal(sum1, M.sum(axis=1, keepdims=True))
 
         # Return a 1x1 matrix (instead of a scalar) when keepdims=True
-        assert_equal(matrix(sumall), M.sum(keepdims=True))
+        assert_array_equal(matrix(sumall), M.sum(keepdims=True))
+        assert_array_equal(matrix(sumall), M.sum(keepdims=True, axis=None))
+        assert_array_equal(matrix(sumall), M.sum(keepdims=True, axis=(0,1)))
 
         assert_array_equal(sum0, np.sum(M, axis=0))
         assert_array_equal(sum1, np.sum(M, axis=1))
-        assert_equal(sumall, np.sum(M))
+        assert_scalar_equal(sumall, np.sum(M))
 
         assert_array_equal(sum0, np.sum(M, axis=0, keepdims=True))
         assert_array_equal(sum1, np.sum(M, axis=1, keepdims=True))
-        assert_equal(matrix(sumall), np.sum(M, keepdims=True))
+        assert_array_equal(matrix(sumall), np.sum(M, keepdims=True))
+        assert_array_equal(matrix(sumall), np.sum(M, keepdims=True, axis=None))
+        assert_array_equal(matrix(sumall), np.sum(M, keepdims=True, axis=(0,1)))
 
     def test_prod(self):
         x = matrix([[1, 2, 3], [4, 5, 6]])
