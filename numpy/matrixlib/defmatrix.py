@@ -254,7 +254,7 @@ class matrix(N.ndarray):
         """A convenience function for operations that want to collapse
         to a scalar like _align, but are using keepdims=True
         """
-        if axis is None:
+        if axis is None or axis == (0, 1):
             return self[0, 0]
         else:
             return self
@@ -317,7 +317,7 @@ class matrix(N.ndarray):
 
         """
         result = N.ndarray.sum(self, axis, dtype, out, keepdims=True)
-        if not keepdims or axis:
+        if (not keepdims) and axis != 0 and axis != 1:
             result = result._collapse(axis)
         return result
 
